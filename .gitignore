@@ -1,0 +1,20 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Trình duyệt Playwright & Hồ sơ cá nhân (Rất nặng, không nên push lên GitHub)
+browser_profile/
+shopee_profile/
+user_data/
+
+# Cookie cá nhân (Bảo mật tài khoản)
+input/cookie.txt
+cookie.txt
+
+# Môi trường ảo & IDE
+venv/
+.venv/
+env/
+.vscode/
+.idea/

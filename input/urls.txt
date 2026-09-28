@@ -1,0 +1,17 @@
+# Danh sách URL sản phẩm cần cào dữ liệu
+# Bạn có thể dán trực tiếp đường link sản phẩm vào đây (mỗi dòng 1 link).
+# Tùy chọn nâng cao: Có thể ghi thêm danh mục (category) và số lượng review tối đa ngăn cách bởi dấu |
+# Ví dụ:
+# https://shopee.vn/product/88201679/23348123049 | electronics | 150
+# https://tiki.vn/binh-giu-nhiet-lock-lock-feather-light-450ml-p194093952.html | home_living | 150
+
+https://tiki.vn/den-diet-muoi-va-cac-loai-con-trung-con-doi-model-cn03-p31541799.html?itm_campaign=CTP_YPD_TKA_PLA_UNK_ALL_UNK_UNK_UNK_UNK_X.6977_Y.57996_Z.192571_CN.Ad-group-6977&itm_medium=CPC&itm_source=tiki-ads&spid=31541800
+https://tiki.vn/binh-giu-nhiet-lock-lock-feather-light-lhc4131-450ml-p2153235.html?spid=3656317
+https://tiki.vn/giay-bac-dan-tuong-nha-bep-chong-tham-dau-tham-nuoc-tien-dung-cach-nhiet-p89227279.html?spid=89227288
+https://tiki.vn/decal-giay-dan-tuong-la-cay-trang-tri-xl8361-p21326884.html?spid=21326885
+https://tiki.vn/den-pixar-den-hoc-chong-can-thi-den-doc-sach-den-lam-viec-de-ban-chong-choi-mat-loa-mat-bao-ve-mat-bong-den-hang-chinh-hang-midoctor-p55669191.html?spid=55669193
+https://tiki.vn/den-pin-led-sieu-sang-mini-co-sac-usb-co-ho-tro-sac-du-phong-lai-cho-dien-thoai-khan-cap-hang-chinh-hang-p44620765.html?spid=44620767
+https://tiki.vn/pin-max-8-4-vien-energizer-e92-bp8-4-aaa-p892141.html?spid=56815640
+https://tiki.vn/thanh-xop-chan-khe-cua-da-nang-thong-minh-p58448882.html?itm_campaign=CTP_YPD_TKA_PLA_UNK_ALL_UNK_UNK_UNK_UNK_X.314603_Y.1896923_Z.4075064_CN.Thanh-xop-chan-cua&itm_medium=CPC&itm_source=tiki-ads&spid=59450398
+https://tiki.vn/goi-ngu-memory-foam-nooz-ruot-goi-cao-su-non-giup-nang-do-dot-song-co-chong-dau-vai-gay-ngu-sau-phu-hop-voi-moi-tu-the-nam-vo-goi-tencel-p146262084.html?itm_campaign=CTP_YPD_TKA_PLA_UNK_ALL_UNK_UNK_UNK_UNK_X.193364_Y.1775691_Z.3489501_CN.Goi&itm_medium=CPC&itm_source=tiki-ads&spid=278098615
+https://tiki.vn/tui-hut-chan-khong-dung-quan-ao-chan-ga-goi-thu-bong-deli-loai-day-cao-cap-bao-ve-quan-ao-chan-ga-khoi-am-nam-moc-chong-nuoc-tuyet-doi-p169978766.html?itm_campaign=CTP_YPD_TKA_PLA_UNK_ALL_UNK_UNK_UNK_UNK_X.310030_Y.1892350_Z.4042611_CN.HL-l-Phu-Kien-Phong-Ngu-Khac&itm_medium=CPC&itm_source=tiki-ads&spid=169978770
