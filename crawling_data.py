@@ -295,7 +295,7 @@ class ReviewCrawler:
         item_id: int,
         product_name: str,
         item_category: str = "general",
-        max_reviews: int = 150,
+        max_reviews: int = 160,
     ):
         print(f"\n[*] Đang khởi động Google Chrome cào Shopee | ID: {item_id}")
         print(f"    Tên sản phẩm: {product_name[:60]}...")
@@ -346,8 +346,12 @@ class ReviewCrawler:
                 };
             """)
 
+            base_target = max_reviews // 5
+            target_for_this_star = base_target
+            collected_for_this_star = 0
+            
             def on_response(response):
-                nonlocal collected
+                nonlocal collected, collected_for_this_star
                 if "get_ratings" in response.url and response.status == 200:
                     try:
                         res_json = response.json()
@@ -363,7 +367,7 @@ class ReviewCrawler:
                                 seen_cmtid.add(cmtid)
 
                                 raw_comment = sanitize_text(r.get("comment", ""))
-                                if len(raw_comment) < 15:
+                                if len(raw_comment) < 30:
                                     continue
 
                                 product_items = r.get("product_items", [])
@@ -392,7 +396,8 @@ class ReviewCrawler:
                                 }
                                 batch.append(record)
                                 collected += 1
-                                if collected >= max_reviews:
+                                collected_for_this_star += 1
+                                if collected_for_this_star >= target_for_this_star or collected >= max_reviews:
                                     break
 
                             if batch:
@@ -427,96 +432,53 @@ class ReviewCrawler:
                 try:
                     page.keyboard.press("Escape")
                 except Exception:
-                    pass
-
-                print("  [2/4] Đang trích xuất đánh giá...")
-                offset = 0
-                limit = 50
-                while collected < max_reviews:
-                    js_code = f"""
-                    async () => {{
-                        try {{
-                            const res = await fetch("https://shopee.vn/api/v2/item/get_ratings?filter=0&flag=1&itemid={item_id}&shopid={shop_id}&limit={limit}&offset={offset}&type=0");
-                            if (res.status === 200) {{
-                                return await res.json();
-                            }}
-                            return {{ status: res.status }};
-                        }} catch (e) {{
-                            return {{ error: e.toString() }};
-                        }}
-                    }}
-                    """
-                    result = page.evaluate(js_code)
-                    if isinstance(result, dict) and "data" in result:
-                        ratings = result.get("data", {}).get("ratings", [])
-                        if not ratings:
-                            break
-                        batch = []
-                        crawled_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                        for r in ratings:
-                            cmtid = str(r.get("cmtid", ""))
-                            rev_id = f"sp_{cmtid}"
-                            if cmtid in seen_cmtid or rev_id in self.seen_review_ids:
-                                continue
-                            seen_cmtid.add(cmtid)
-
-                            raw_comment = sanitize_text(r.get("comment", ""))
-                            if len(raw_comment) < 15:
-                                continue
-
-                            product_items = r.get("product_items", [])
-                            variant = ""
-                            if product_items and isinstance(product_items, list):
-                                variant = product_items[0].get("model_name", "")
-
-                            ctime = r.get("ctime", 0)
-                            created_at = (
-                                datetime.fromtimestamp(ctime).strftime("%Y-%m-%d %H:%M:%S")
-                                if ctime
-                                else ""
-                            )
-
-                            record = {
-                                "review_id": rev_id,
-                                "platform": "shopee",
-                                "item_id": str(item_id),
-                                "item_category": item_category,
-                                "product_name": sanitize_text(product_name),
-                                "product_variant": sanitize_text(variant),
-                                "rating_star": int(r.get("rating_star", 5)),
-                                "raw_comment": raw_comment,
-                                "created_at": created_at,
-                                "crawled_at": crawled_at,
-                            }
-                            batch.append(record)
-                            collected += 1
-                            if collected >= max_reviews:
-                                break
-
-                        if batch:
-                            self.save_records(batch)
-                        offset += limit
-                        page.wait_for_timeout(1000)
-                    else:
+                    print("  [2/4] Đang trích xuất đánh giá bằng cách mô phỏng người dùng click...")
+                # Đợi phần đánh giá load xong
+                try:
+                    page.wait_for_selector(".product-rating-overview__filter", timeout=10000)
+                    page.evaluate("window.scrollBy(0, 800)")
+                    page.wait_for_timeout(2000)
+                except Exception:
+                    print("  [!] Không tìm thấy khu vực đánh giá, có thể sản phẩm chưa có review.")
+                
+                # Các nút lọc sao trên Shopee: Tất cả (0), 5 Sao (1), 4 Sao (2), 3 Sao (3), 2 Sao (4), 1 Sao (5)
+                # Ta sẽ click từng nút 1 Sao, 2 Sao, 3 Sao, 4 Sao, 5 Sao
+                # Index của .product-rating-overview__filter thường là:
+                # 0: Tất cả, 1: 5 Sao, 2: 4 Sao, 3: 3 Sao, 4: 2 Sao, 5: 1 Sao
+                
+                carry_over = 0
+                for star_index in [5, 4, 3, 2, 1]:
+                    if collected >= max_reviews:
                         break
-
-                if collected < max_reviews:
-                    print("  [3/4] Đang cuộn trang xuống phần Đánh giá sản phẩm...")
-                    for _ in range(8):
-                        page.evaluate("window.scrollBy(0, 600)")
-                        page.wait_for_timeout(800)
-
-                    print(f"  [4/4] Đã thu thập: {collected}/{max_reviews} đánh giá. Đang quét thêm trang...")
-                    page_step = 1
-                    while collected < max_reviews and page_step < 20:
-                        next_btn = page.query_selector(
-                            ".shopee-page-controller .shopee-icon-button--right, button[aria-label='next page'], .shopee-icon-button--right"
-                        )
-                        if not next_btn or not next_btn.is_enabled():
-                            break
-                        next_btn.click()
-                        page.wait_for_timeout(2500)
-                        page_step += 1
+                    
+                    target_for_this_star = base_target + carry_over
+                    if star_index == 1:
+                        target_for_this_star = max_reviews - collected
+                    
+                    collected_for_this_star = 0
+                    
+                    try:
+                        filters = page.query_selector_all(".product-rating-overview__filter")
+                        if len(filters) > star_index:
+                            star_text = filters[star_index].inner_text()
+                            print(f"  -> Đang thu thập mục: {star_text.strip()} (Mục tiêu: {target_for_this_star} đánh giá)")
+                            filters[star_index].click()
+                            page.wait_for_timeout(2500) # Đợi on_response bắt API
+                            
+                            # Click qua trang tiếp theo của mục sao này (nếu có)
+                            page_step = 1
+                            while collected_for_this_star < target_for_this_star and collected < max_reviews and page_step < 20:
+                                next_btn = page.query_selector(".shopee-page-controller .shopee-icon-button--right")
+                                if next_btn and next_btn.is_enabled():
+                                    next_btn.click()
+                                    page.wait_for_timeout(2000)
+                                    page_step += 1
+                                else:
+                                    break
+                    except Exception as e:
+                        print(f"  [!] Lỗi khi click mục {star_index}: {e}")
+                    
+                    carry_over = target_for_this_star - collected_for_this_star
 
             except Exception as e:
                 print(f"  [!] Lỗi khi cào bằng Playwright: {e}")
@@ -583,7 +545,7 @@ class ReviewCrawler:
                     full_text = f"{title}. {content}" if title else content
                     raw_comment = sanitize_text(full_text)
 
-                    if len(raw_comment) < 15:
+                    if len(raw_comment) < 30:
                         continue
 
                     created_at_val = r.get("created_at")
