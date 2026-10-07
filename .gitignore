@@ -18,3 +18,22 @@ venv/
 env/
 .vscode/
 .idea/
+
+# API Keys & Secrets (Tránh lộ key lên GitHub)
+.env
+*.env
+input/api_key.txt
+api_key.txt
+
+# =========================================
+# MODEL WEIGHTS & LOGS (TUYỆT ĐỐI BỎ QUA)
+# =========================================
+*.pt
+*.pth
+*.bin
+*.ckpt
+saved_models/
+checkpoints/
+runs/
+logs/
+wandb/
