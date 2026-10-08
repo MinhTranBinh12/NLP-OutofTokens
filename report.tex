@@ -1,0 +1,192 @@
+\documentclass[11pt,a4paper]{article}
+
+% Các gói bắt buộc để biên dịch tiếng Việt và toán học trên Overleaf (tránh lỗi font Unicode)
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc}
+\usepackage[vietnamese]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{geometry}
+\geometry{top=2cm, bottom=2cm, left=2cm, right=2cm}
+
+\begin{document}
+
+\title{\textbf{\Large THIẾT KẾ PIPELINE TỪ TIỀN XỬ LÝ ĐẾN HUẤN LUYỆN}\\
+\large Bài toán Phân tích Cảm xúc Đa khía cạnh (Multi-Task ABSA trên ViCloABSA)\\
+\normalsize \textit{Tài liệu thảo luận và thống nhất phương án nội bộ nhóm}}
+\author{Nhóm Đồ án NLP}
+\date{Tháng 10, Năm 2026}
+\maketitle
+
+\section{Tổng quan Bài toán và Không gian Nhãn}
+Hệ thống xử lý bài toán Phân tích Cảm xúc Đa khía cạnh (Multi-Task ABSA) cho các đánh giá thương mại điện tử thuộc ngành Thời trang (dựa trên tập dữ liệu chuẩn ViCloABSA gồm 5.001 mẫu huấn luyện, 1.001 mẫu kiểm chuẩn và 1.001 mẫu kiểm thử).
+
+\begin{itemize}
+    \item \textbf{Đầu vào ($x$):} Chuỗi văn bản đánh giá thô của khách hàng.
+    \item \textbf{Đầu ra ($\mathbf{y}$):} Vector nhãn 5 chiều tương ứng với 5 khía cạnh độc lập:
+    \begin{equation}
+        \mathbf{y} = [y_{\text{General}}, y_{\text{Design}}, y_{\text{Material}}, y_{\text{Price}}, y_{\text{Service}}] \in \{0, 1, 2, 3\}^5
+    \end{equation}
+    \item \textbf{Không gian nhãn 4 lớp:}
+    \begin{itemize}
+        \item $0$: None (Không đề cập đến khía cạnh).
+        \item $1$: Positive (Đánh giá tích cực / Khen ngợi).
+        \item $2$: Neutral / Mixed (Trung tính hoặc Vừa khen vừa chê).
+        \item $3$: Negative (Đánh giá tiêu cực / Phàn nàn).
+    \end{itemize}
+\end{itemize}
+
+\section{Chi tiết Quy trình Pipeline 10 Bước (B0 -- B9)}
+
+\subsection*{B0. Kiểm toán Dữ liệu Thực nghiệm (EDA \& Data Audit)}
+\textit{Nguyên tắc: Thực hiện trước mọi can thiệp mã nguồn để nắm rõ các đặc trưng phân bố thực tế.}
+\begin{itemize}
+    \item \textbf{Phân bố nhãn $0, 1, 2, 3$ theo từng khía cạnh:} Lớp 0 (None) thường chiếm từ 60\% đến 80\% tổng nhãn. Cần thống kê số liệu để làm đầu vào tính toán trọng số phạt.
+    \item \textbf{Kiểm tra rò rỉ dữ liệu (Data Leakage):} Các câu ngắn sáo rỗng (như \textit{"áo đẹp", "giao nhanh"}\dots) xuất hiện đồng thời ở cả tập Train và Test.
+\end{itemize}
+
+\subsection*{B1. Chuẩn hóa Văn bản Tiếng Việt (Text Normalization)}
+Các thao tác tiền xử lí:
+\begin{enumerate}
+    \item \textbf{Unicode NFC:} Đồng nhất ký tự dựng sẵn.
+    \item \textbf{Chuẩn hóa dấu thanh:} Đưa về quy chuẩn đặt dấu kiểu mới (\textit{"hòa", "thúy"}), đồng nhất biểu diễn từ trong từ vựng pretrain.
+    \item \textbf{Rút gọn ký tự lặp:} Biến đổi các từ kéo dài cảm xúc như \textit{"đẹpppp"} $\rightarrow$ \textit{"đẹp"}, \textit{"quáaaaa"} $\rightarrow$ \textit{"quá"} để tránh sinh ra token rác.
+    \item \textbf{Giải quyết bẫy chữ "k" giá tiền:} Bóc tách giá tiền dạng \texttt{\textbackslash d+k} (như \textit{"92k", "150k"}) trước khi thay thế từ điển teencode.
+    \item \textbf{Chuẩn hóa teencode có chọn lọc:} Dùng từ điển nhỏ, kiểm soát tay đối với các từ viết tắt phổ biến: \textit{ko, k $\rightarrow$ không; sp $\rightarrow$ sản phẩm; đc $\rightarrow$ được; sz $\rightarrow$ size}.
+    \item \textbf{Xử lý Emoji:} PhoBERT không hỗ trợ emoji tốt trong từ điển, nên loại bỏ hoặc thay thế bằng token đại diện. (Nếu dùng ViSoBERT thì giữ nguyên vì mô hình này học rất sâu emoji).
+\end{enumerate}
+
+% \noindent\textbf{Những điều tuyệt đối KHÔNG LÀM khi xử lý văn bản cho ABSA:}
+% \begin{itemize}
+%     \item \textit{Không xóa Stopwords:} Các từ phủ định và đo lường mức độ (\textit{"không", "chưa", "hơi", "quá", "rất"}) quyết định trực tiếp chiều cảm xúc (\textit{"hơi mỏng" $\neq$ "mỏng" $\neq$ "không mỏng"}).
+%     \item \textit{Không xóa dấu câu:} Dấu phẩy và dấu chấm phân tách các mệnh đề độc lập tương ứng với các khía cạnh khác nhau (\textit{"Áo đẹp. Giao hàng hơi lâu"}).
+%     \item \textit{Không stemming / lemmatization:} Không phù hợp với đặc thù ngữ pháp tiếng Việt (ngôn ngữ đơn lập).
+%     \item \textit{Không lọc review ngắn/rác ở tập Test:} Tập kiểm thử phải phản ánh đúng phân phối thực tế của người dùng.
+% \end{itemize}
+
+\subsection*{B2. Tách từ Tiếng Việt (Word Segmentation)}
+\begin{itemize}
+    \item \textbf{Công cụ:} Sử dụng các công cụ (model pretrained hoặc tách theo qui luật) để nối các từ ghép (\textit{"giao hàng nhanh"} $\rightarrow$ \textit{"giao\_hàng nhanh"}).
+    \item \textbf{Lý do:} PhoBERT được huấn luyện trước trên dữ liệu báo chí tiếng Việt đã được tách từ. Việc đưa văn bản đã tách từ giúp tokenizer ánh xạ chính xác vào từ vựng của PhoBERT.
+    \item \textbf{Lưu ý:} Nếu thử nghiệm các mô hình subword đa ngôn ngữ hoặc mô hình mạng xã hội như ViSoBERT hay XLM-RoBERTa thì \textbf{không thực hiện bước này}.
+\end{itemize}
+
+\subsection*{B3. Xử lý Nhãn và Chính sách Xung đột Cảm xúc}
+
+\paragraph{Nhánh 1 (Sentence-Level): Chuyển đổi sang Vector Nhãn 5 Khía cạnh}
+\begin{itemize}
+    \item \textbf{Định dạng nhãn:} Biến đổi mỗi mẫu thành vector số nguyên 5 chiều $\mathbf{y} \in \{0, 1, 2, 3\}^5$.
+    \item \textbf{Chính sách gộp câu vừa khen vừa chê:} Khi một review chứa cả cụm từ khen và cụm từ chê trên cùng một khía cạnh, hệ thống gộp về nhãn \textbf{2 (Neutral / Mixed)}. Điều này giúp bảo toàn tính cân bằng cảm xúc tổng thể.
+\end{itemize}
+
+\paragraph{Nhánh 2 (Span-Level): Chuyển đổi sang Chuỗi 31 Nhãn BIO}
+\begin{itemize}
+    \item \textbf{31 Nhãn:} \texttt{0} (đại diện cho \texttt{None} ở cấp độ token) + $5 \times 3 \times 2 = 30$ nhãn (\texttt{B-Material\#positive}, \texttt{I-Material\#positive}, \dots).
+    \item \textbf{Quy trình gán nhãn token:}
+    \begin{itemize}
+        \item Dùng \texttt{tokenizer(text, return\_offsets\_mapping=True, max\_length=128, truncation=True)}.
+        \item Dựa vào \texttt{offset\_mapping} (khoảng \texttt{[char\_start, char\_end]} của từng token) để khớp chính xác với \texttt{[start\_char, end\_char]} trong file JSON.
+        \item Token đầu tiên của span được gán \texttt{B-<Aspect\#Sentiment>}, các token tiếp theo trong span được gán \texttt{I-<Aspect\#Sentiment>}. Các token còn lại gán \texttt{0}.
+        \item \textbf{Điểm vượt trội:} Xử lý trọn vẹn 100\% cả 32 mẫu conflict vì mỗi vế là một span riêng biệt.
+    \end{itemize}
+\end{itemize}
+
+\subsection*{B4. Tokenize và Chiến lược Padding Động}
+\begin{itemize}
+    \item \textbf{Cắt ngưỡng độ dài tại phân vị $p95$ ($L_{\max} \approx 96$--$128$ tokens):} Tránh đặt cố định độ dài tối đa lên 256. Phần lớn bình luận Shopee rất ngắn; việc cắt tại $p95$ giúp tiết kiệm từ 3 đến 4 lần bộ nhớ GPU và tăng tốc độ xử lý mà chỉ bỏ sót phần đuôi của khoảng 5\% câu quá dài.
+    \item \textbf{Dynamic Padding:} Áp dụng \texttt{DataCollatorWithPadding} để chỉ độn các chuỗi theo câu dài nhất trong từng batch cụ thể, thay vì độn toàn bộ dữ liệu lên cùng một kích thước cố định.
+\end{itemize}
+
+\subsection*{B5. Kiến trúc Mô hình Đề xuất (Shared-Encoder Multi-Head)}
+
+\paragraph{Mô hình cơ sở (Baseline bắt buộc):}
+Sử dụng TF-IDF (n-gram 1--2) kết hợp với 5 bộ phân loại Logistic Regression độc lập để thiết lập ngưỡng so sánh thực nghiệm ban đầu, chứng minh sự cần thiết và tính vượt trội của mô hình học sâu.
+
+\paragraph{Lựa chọn Backbone:}
+\begin{itemize}
+    \item \textbf{PhoBERT-base-v2 (Mô hình chính):} Chuẩn mực trong xử lý ngôn ngữ tự nhiên tiếng Việt, biểu diễn ngữ nghĩa sâu sắc.
+    \item \textbf{ViSoBERT-base (Mô hình so sánh):} Được pretrain trực tiếp trên dữ liệu mạng xã hội tiếng Việt, am hiểu ngôn ngữ teencode và biểu tượng cảm xúc.
+\end{itemize}
+
+\paragraph{Kiến trúc Shared-Encoder:}
+Đoạn văn bản sau khi qua PhoBERT được trích xuất vector biểu diễn câu thông qua lớp Mean Pooling:
+\begin{equation}
+    \mathbf{h} = \text{MeanPooling}(\text{PhoBERT}(x)) \in \mathbb{R}^{768}
+\end{equation}
+Vector $\mathbf{h}$ được đưa song song qua 5 đầu phân loại tuyến tính độc lập (mỗi đầu cho một khía cạnh $a$):
+\begin{equation}
+    \mathbf{z}_a = \mathbf{W}_a \cdot \text{Dropout}(\mathbf{h}) + \mathbf{b}_a \quad (\mathbf{W}_a \in \mathbb{R}^{4 \times 768}, \ \mathbf{b}_a \in \mathbb{R}^4)
+\end{equation}
+Xác suất dự đoán cho 4 lớp cảm xúc của khía cạnh $a$ được tính bằng hàm Softmax:
+\begin{equation}
+    \hat{\mathbf{y}}_a = \text{Softmax}(\mathbf{z}_a) \in [0, 1]^4
+\end{equation}
+
+\paragraph{Cơ sở lựa chọn Shared-Encoder thay vì 5 mô hình riêng biệt:}
+\begin{enumerate}
+    \item \textbf{Học tương quan ngữ nghĩa giữa các khía cạnh:} Đánh giá tiêu cực về chất liệu thường kéo theo cảm xúc chung (General) tiêu cực. Một bộ encoder dùng chung giúp chia sẻ không gian biểu diễn ngữ cảnh này.
+    \item \textbf{Hỗ trợ khía cạnh hiếm dữ liệu:} Khía cạnh Price (giá cả) xuất hiện ít trong tập dữ liệu sẽ học ké được các đặc trưng biểu diễn tổng quát từ các khía cạnh phong phú dữ liệu như Design và Material.
+    \item \textbf{Tối ưu tài nguyên suy luận:} Chỉ cần thực hiện 1 lần forward encoder cho cả 5 khía cạnh thay vì 5 lần riêng biệt, giúp tăng tốc độ suy luận gấp 5 lần khi triển khai.
+\end{enumerate}
+
+\subsection*{B6. Hàm Mất mát Xử lý Mất cân bằng Lớp (Class-Weighted Loss)}
+Hàm mất mát tổng của hệ thống là tổng mất mát phân loại trên cả 5 khía cạnh:
+\begin{equation}
+    \mathcal{L}_{\text{total}} = \sum_{a=1}^5 \mathcal{L}_a = - \sum_{a=1}^5 \sum_{c=0}^3 w_{a,c} \cdot y_{a,c} \cdot \log(\hat{y}_{a,c})
+\end{equation}
+Trong đó, trọng số phạt $w_{a,c}$ cho lớp $c$ thuộc khía cạnh $a$ được tính theo nghịch đảo căn bậc hai của tần suất lớp trên tập huấn luyện:
+\begin{equation}
+    w_{a,c} = \frac{1}{\sqrt{N_{a,c} + \epsilon}}
+\end{equation}
+($N_{a,c}$ là số mẫu thực tế của lớp $c$ ở khía cạnh $a$). Việc sử dụng căn bậc hai giúp làm mượt trọng số, tránh trường hợp các lớp cực hiếm nhận trọng số quá lớn dẫn đến bùng nổ gradient. 
+
+\textit{Lưu ý:} Nhóm không sử dụng phương pháp nhân bản mẫu (Oversampling) vì trong bài toán nhãn đa chiều, việc nhân bản một câu sẽ làm méo mó phân bố của 4 khía cạnh còn lại.
+
+\subsection*{B7. Cấu hình Huấn luyện Tối ưu}
+\begin{itemize}
+    \item \textbf{Optimizer:} AdamW với hệ số phân rã trọng số \texttt{weight\_decay = 0.01}.
+    \item \textbf{Tốc độ học phân tầng (Layer-wise LR):} Đặt LR cho bộ Encoder nhỏ ($2\times 10^{-5}$ -- $3\times 10^{-5}$) để tinh chỉnh nhẹ, và đặt LR cho các đầu phân loại lớn hơn ($1\times 10^{-3}$) do các đầu Linear này khởi tạo ngẫu nhiên nên cần học nhanh hơn.
+    \item \textbf{Warmup \& Scheduler:} Sử dụng Linear Warmup trong 10\% số bước đầu tiên kết hợp suy giảm tuyến tính (Linear Decay) để tránh sốc gradient.
+    \item \textbf{Kích thước Batch:} 16 hoặc 32, tương thích với bộ nhớ GPU phổ thông (Google Colab T4 16GB).
+    \item \textbf{Early Stopping:} Kiên nhẫn dừng sau 2 epochs không cải thiện chỉ số Macro-F1 trung bình trên tập Dev (không theo dõi loss để tránh thiên lệch về lớp đa số).
+    \item \textbf{Mixed Precision:} Sử dụng FP16 để tăng tốc độ huấn luyện lên khoảng 2 lần.
+    \item \textbf{Độ tin cậy thực nghiệm:} Chạy trên 3 hạt ngẫu nhiên (Random Seeds: 42, 123, 999) và báo cáo kết quả dưới dạng $\text{Mean} \pm \text{Std}$.
+\end{itemize}
+
+\subsection*{B8. Tiêu chuẩn Đánh giá 3 Tầng \& Phân tích Lỗi}
+Hệ thống không sử dụng thước đo Accuracy làm thước đo chính do lớp 0 chiếm ưu thế áp đảo. Nhóm áp dụng quy trình đánh giá 3 tầng:
+\begin{enumerate}
+    \item \textbf{Tầng 1 (Chỉ số quyết định cốt lõi): Aspect Macro-F1 (4 lớp):} Tính Macro-F1 độc lập cho từng khía cạnh và lấy trung bình cộng cả 5 khía cạnh.
+    \item \textbf{Tầng 2: Aspect Detection F1 (Nhị phân):} Đánh giá xem mô hình có phát hiện được sự tồn tại của khía cạnh hay không ($0$ vs $\{1, 2, 3\}$).
+    \item \textbf{Tầng 3: Aspect Sentiment F1 (3 lớp):} Khi đã xác định câu có đề cập đến khía cạnh, đánh giá độ chính xác của việc phân loại cảm xúc (Positive, Neutral, Negative).
+\end{enumerate}
+
+\noindent\textbf{Lưu ý quan trọng khi bảo vệ trước Hội đồng:} Bài toán của nhóm được định nghĩa là \textbf{phân loại đa nhiệm cấp độ toàn câu (Sentence-Level Multi-Task Classification)}, khác với bài báo ViCloABSA gốc vốn thực hiện \textbf{trích xuất span ký tự (Sequence Labeling)}. Do đó, nhóm không thể so sánh trực tiếp con số F1 với bài báo gốc mà tập trung chứng minh tính ứng dụng và hiệu quả thực tế của mô hình phân loại toàn câu.
+
+\subsection*{B9. Kế hoạch Nghiên cứu Bóc tách (Ablation Study) \& Đánh giá Ngoài miền}
+
+\paragraph{Kế hoạch Thí nghiệm Bóc tách (Ablation Study):}
+Nhóm tiến hành 6 cấu hình thí nghiệm để đánh giá đóng góp của từng thành phần:
+\begin{enumerate}
+    \item TF-IDF + Logistic Regression (Thiết lập đường cơ sở Baseline).
+    \item PhoBERT-base tiêu chuẩn với hàm mất mát Cross-Entropy thông thường (Đánh giá năng lực nguyên bản của Transformer).
+    \item PhoBERT-base kết hợp Class-Weighted Loss (Chứng minh hiệu quả của việc xử lý mất cân bằng dữ liệu).
+    \item Cấu hình số 3 nhưng loại bỏ bước chuẩn hóa Teencode ở B1 (Chứng minh đóng góp của các quy tắc tiền xử lý văn bản).
+    \item Cấu hình số 3 nhưng thay thế Mean Pooling bằng token \texttt{[CLS]} (Đánh giá phương thức trích xuất biểu diễn câu).
+    \item ViSoBERT-base với cấu hình tối ưu (So sánh hiệu năng giữa mô hình học từ Báo chí và mô hình học từ Mạng xã hội).
+\end{enumerate}
+
+\paragraph{Đánh giá Ngoài miền (Out-of-Domain Evaluation):}
+Tận dụng tập dữ liệu cào Shopee từ ngành hàng Đồ điện tử / Loa Bluetooth (\texttt{reviews\_cuong.tsv}) để trích xuất khoảng 100--150 đánh giá làm tập kiểm thử ngoài miền:
+\begin{itemize}
+    \item Đánh giá xem mô hình học từ ngành Thời trang khi đối mặt với dữ liệu Đồ điện tử sẽ duy trì được hiệu năng ở những khía cạnh nào (kỳ vọng: khía cạnh \textit{Service} và \textit{General} vẫn duy trì tốt, trong khi \textit{Material} và \textit{Design} sẽ suy giảm mạnh do đặc thù ngành hàng).
+    \item Đây là điểm nhấn thực nghiệm thể hiện chiều sâu nghiên cứu của nhóm về giới hạn chuyển giao tri thức của mô hình.
+\end{itemize}
+
+\section{Các Câu hỏi Trọng tâm Cần Nhóm Chốt Quyết định}
+\begin{enumerate}
+    \item \textbf{Chính sách gộp câu vừa khen vừa chê:} Nhóm có thống nhất giữ nguyên quy tắc gộp về \textbf{2 (Neutral)} hay muốn chuyển sang chính sách ưu tiên nhãn \textbf{3 (Negative)} để phục vụ bài toán phát hiện khiếu nại?
+    \item \textbf{Phân bổ tài nguyên huấn luyện:} Nhóm thống nhất chạy thực nghiệm trên Google Colab T4 (16GB VRAM) hay tận dụng card đồ họa rời cá nhân (NVIDIA RTX)?
+    \item \textbf{Thực hiện bài test Ngoài miền (Out-of-Domain):} Nhóm có đồng ý gán nhãn kiểm chứng nhanh cho 100 câu review Loa Bluetooth của Cường để tạo điểm nhấn cho báo cáo cuối kỳ không?
+\end{enumerate}
+
+\end{document}

@@ -1,0 +1,17 @@
+# Các thư viện chung cho toàn bộ dự án (cả 3 mô hình)
+# Cách cài đặt: pip install -r requirements.txt
+
+# --- Core Deep Learning ---
+torch
+transformers
+numpy
+
+# --- Baseline & Metrics ---
+scikit-learn
+
+# --- Utilities ---
+tqdm
+
+# --- Model 3 (CRF) ---
+pytorch-crf
+seqeval
