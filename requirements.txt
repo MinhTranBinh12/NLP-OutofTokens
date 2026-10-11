@@ -13,5 +13,5 @@ scikit-learn
 tqdm
 
 # --- Model 3 (CRF) ---
-pytorch-crf
-seqeval
+# pytorch-crf (Sẽ cài đặt riêng khi Cường làm mô hình 3)
+# seqeval
