@@ -1,0 +1,18 @@
+[
+  {
+    "epoch": 1,
+    "train_loss": 0.0,
+    "dev_Material_macro_f1": 0.7573618735810014,
+    "dev_Material_acc": 0.849,
+    "dev_General_macro_f1": 0.6161581699772769,
+    "dev_General_acc": 0.757,
+    "dev_Service_macro_f1": 0.6509708409496074,
+    "dev_Service_acc": 0.934,
+    "dev_Design_macro_f1": 0.6323780550952776,
+    "dev_Design_acc": 0.805,
+    "dev_Price_macro_f1": 0.7102483095000555,
+    "dev_Price_acc": 0.933,
+    "dev_mean_aspect_macro_f1": 0.6734234498206437,
+    "dev_exact_match_ratio": 0.481
+  }
+]
