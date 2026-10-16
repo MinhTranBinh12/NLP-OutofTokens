@@ -14,6 +14,24 @@
     "proportional_recall": 0.7874493927125507,
     "proportional_f1": 0.7136305265088975
   },
+  "test_sentence_level": {
+    "mean_aspect_macro_f1": 0.7509,
+    "exact_match_ratio": 0.5920,
+    "aspect_macro_f1": {
+      "Material": 0.7964,
+      "Service": 0.7664,
+      "Price": 0.7662,
+      "General": 0.7216,
+      "Design": 0.7038
+    },
+    "aspect_accuracy": {
+      "Material": 0.8920,
+      "Service": 0.9530,
+      "Price": 0.9420,
+      "General": 0.8270,
+      "Design": 0.8390
+    }
+  },
   "test_per_category": {
     "Design#negative": {
       "precision": 0.3698630136986301,
