@@ -1,0 +1,392 @@
+2026-10-12 11:31:13 | INFO | __main__ | GPU: NVIDIA GeForce RTX 4060 Laptop GPU (8.0 GB)
+2026-10-12 11:31:13 | INFO | __main__ | Device: cuda
+2026-10-12 11:31:13 | INFO | __main__ | Config: ABSAConfig(model_name='vinai/phobert-base-v2', use_crf=True, dropout=0.1, data_dir='data', train_file='train_data_processed.json', dev_file='dev_data_processed.json', test_file='test_data_processed.json', max_length=256, num_epochs=15, batch_size=16, eval_batch_size=32, learning_rate=3e-05, encoder_lr=2e-05, classifier_lr=0.0001, weight_decay=0.01, warmup_ratio=0.1, max_grad_norm=1.0, gradient_accumulation_steps=1, scheduler_type='cosine', output_dir='./output', logging_steps=50, save_best_only=True, seed=42, fp16=True, num_workers=0, aspects=['Material', 'General', 'Service', 'Design', 'Price'], sentiments=['positive', 'neutral', 'negative'])
+2026-10-12 11:31:13 | INFO | __main__ | Labels (31): ['O', 'B-Material#positive', 'I-Material#positive', 'B-Material#neutral', 'I-Material#neutral', 'B-Material#negative', 'I-Material#negative', 'B-General#positive', 'I-General#positive', 'B-General#neutral', 'I-General#neutral', 'B-General#negative', 'I-General#negative', 'B-Service#positive', 'I-Service#positive', 'B-Service#neutral', 'I-Service#neutral', 'B-Service#negative', 'I-Service#negative', 'B-Design#positive', 'I-Design#positive', 'B-Design#neutral', 'I-Design#neutral', 'B-Design#negative', 'I-Design#negative', 'B-Price#positive', 'I-Price#positive', 'B-Price#neutral', 'I-Price#neutral', 'B-Price#negative', 'I-Price#negative']
+2026-10-12 11:31:13 | INFO | __main__ | Loading tokenizer: vinai/phobert-base-v2
+2026-10-12 11:31:13 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/vinai/phobert-base-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-10-12 11:31:13 | WARNING | huggingface_hub.utils._http | Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-10-12 11:31:13 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/vinai/phobert-base-v2/86cd7fd4c148980922ac11a2cf5e257f2ba639e1/config.json "HTTP/1.1 200 OK"
+2026-10-12 11:31:14 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/vinai/phobert-base-v2/resolve/main/tokenizer_config.json "HTTP/1.1 404 Not Found"
+2026-10-12 11:31:14 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/vinai/phobert-base-v2/resolve/main/tokenizer_config.json "HTTP/1.1 404 Not Found"
+2026-10-12 11:31:14 | INFO | httpx | HTTP Request: GET https://huggingface.co/api/models/vinai/phobert-base-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-10-12 11:31:15 | INFO | httpx | HTTP Request: GET https://huggingface.co/api/models/vinai/phobert-base-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-10-12 11:31:15 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/vinai/phobert-base-v2/resolve/main/vocab.txt "HTTP/1.1 307 Temporary Redirect"
+2026-10-12 11:31:15 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/vinai/phobert-base-v2/86cd7fd4c148980922ac11a2cf5e257f2ba639e1/vocab.txt "HTTP/1.1 200 OK"
+2026-10-12 11:31:15 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/vinai/phobert-base-v2/resolve/main/tokenizer.json "HTTP/1.1 307 Temporary Redirect"
+2026-10-12 11:31:15 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/vinai/phobert-base-v2/86cd7fd4c148980922ac11a2cf5e257f2ba639e1/tokenizer.json "HTTP/1.1 200 OK"
+2026-10-12 11:31:16 | INFO | __main__ | Tokenizer type: TokenizersBackend | Fast: True
+2026-10-12 11:31:16 | INFO | __main__ | Loading datasets...
+2026-10-12 11:31:16 | INFO | src.data | Loaded 5000 samples from data\train_data_processed.json
+2026-10-12 11:31:16 | INFO | src.data | Loaded 1000 samples from data\dev_data_processed.json
+2026-10-12 11:31:16 | INFO | src.data | Loaded 1000 samples from data\test_data_processed.json
+2026-10-12 11:31:16 | INFO | __main__ | Data loaded: Train=5000 | Dev=1000 | Test=1000
+2026-10-12 11:31:16 | INFO | __main__ | Loading model: vinai/phobert-base-v2 (CRF=True)
+2026-10-12 11:31:16 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/vinai/phobert-base-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-10-12 11:31:16 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/vinai/phobert-base-v2/86cd7fd4c148980922ac11a2cf5e257f2ba639e1/config.json "HTTP/1.1 200 OK"
+2026-10-12 11:31:17 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/vinai/phobert-base-v2/resolve/main/model.safetensors "HTTP/1.1 404 Not Found"
+2026-10-12 11:31:17 | INFO | src.model | CRF layer enabled
+2026-10-12 11:31:17 | INFO | src.model | Model: vinai/phobert-base-v2 | Labels: 31 | CRF: True | Hidden: 768
+2026-10-12 11:31:18 | INFO | httpx | HTTP Request: GET https://huggingface.co/api/models/vinai/phobert-base-v2 "HTTP/1.1 200 OK"
+2026-10-12 11:31:18 | INFO | httpx | HTTP Request: GET https://huggingface.co/api/models/vinai/phobert-base-v2/commits/main "HTTP/1.1 200 OK"
+2026-10-12 11:31:18 | INFO | httpx | HTTP Request: GET https://huggingface.co/api/models/vinai/phobert-base-v2/discussions?p=0 "HTTP/1.1 200 OK"
+2026-10-12 11:31:19 | INFO | httpx | HTTP Request: GET https://huggingface.co/api/models/vinai/phobert-base-v2/commits/refs%2Fpr%2F5 "HTTP/1.1 200 OK"
+2026-10-12 11:31:19 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/vinai/phobert-base-v2/resolve/refs%2Fpr%2F5/model.safetensors.index.json "HTTP/1.1 404 Not Found"
+2026-10-12 11:31:19 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/vinai/phobert-base-v2/resolve/refs%2Fpr%2F5/model.safetensors "HTTP/1.1 302 Found"
+2026-10-12 11:31:20 | INFO | __main__ | Parameters: 135,023,134 total | 135,023,134 trainable
+2026-10-12 11:31:20 | INFO | src.model | Parameter groups: Encoder (199 params, lr=2e-05) | Head (5 params, lr=0.0001)
+2026-10-12 11:31:20 | INFO | __main__ | Scheduler: cosine | Total steps: 4695 | Warmup: 469
+2026-10-12 11:31:20 | INFO | __main__ | ============================================================
+2026-10-12 11:31:20 | INFO | __main__ | BẮT ĐẦU HUẤN LUYỆN
+2026-10-12 11:31:20 | INFO | __main__ | ============================================================
+2026-10-12 12:08:13 | INFO | __main__ | GPU: NVIDIA GeForce RTX 4060 Laptop GPU (8.0 GB)
+2026-10-12 12:08:13 | INFO | __main__ | Device: cuda
+2026-10-12 12:08:13 | INFO | __main__ | Config: ABSAConfig(model_name='vinai/phobert-base-v2', use_crf=True, dropout=0.1, data_dir='data', train_file='train_data_processed.json', dev_file='dev_data_processed.json', test_file='test_data_processed.json', max_length=256, num_epochs=15, batch_size=16, eval_batch_size=32, learning_rate=3e-05, encoder_lr=2e-05, classifier_lr=0.0001, weight_decay=0.01, warmup_ratio=0.1, max_grad_norm=1.0, gradient_accumulation_steps=1, scheduler_type='cosine', output_dir='./output', logging_steps=50, save_best_only=True, seed=42, fp16=True, num_workers=0, aspects=['Material', 'General', 'Service', 'Design', 'Price'], sentiments=['positive', 'neutral', 'negative'])
+2026-10-12 12:08:13 | INFO | __main__ | Labels (31): ['O', 'B-Material#positive', 'I-Material#positive', 'B-Material#neutral', 'I-Material#neutral', 'B-Material#negative', 'I-Material#negative', 'B-General#positive', 'I-General#positive', 'B-General#neutral', 'I-General#neutral', 'B-General#negative', 'I-General#negative', 'B-Service#positive', 'I-Service#positive', 'B-Service#neutral', 'I-Service#neutral', 'B-Service#negative', 'I-Service#negative', 'B-Design#positive', 'I-Design#positive', 'B-Design#neutral', 'I-Design#neutral', 'B-Design#negative', 'I-Design#negative', 'B-Price#positive', 'I-Price#positive', 'B-Price#neutral', 'I-Price#neutral', 'B-Price#negative', 'I-Price#negative']
+2026-10-12 12:08:13 | INFO | __main__ | Loading tokenizer: vinai/phobert-base-v2
+2026-10-12 12:08:13 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/vinai/phobert-base-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-10-12 12:08:13 | WARNING | huggingface_hub.utils._http | Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-10-12 12:08:13 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/vinai/phobert-base-v2/86cd7fd4c148980922ac11a2cf5e257f2ba639e1/config.json "HTTP/1.1 200 OK"
+2026-10-12 12:08:13 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/vinai/phobert-base-v2/resolve/main/tokenizer_config.json "HTTP/1.1 404 Not Found"
+2026-10-12 12:08:14 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/vinai/phobert-base-v2/resolve/main/tokenizer_config.json "HTTP/1.1 404 Not Found"
+2026-10-12 12:08:14 | INFO | httpx | HTTP Request: GET https://huggingface.co/api/models/vinai/phobert-base-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-10-12 12:08:14 | INFO | httpx | HTTP Request: GET https://huggingface.co/api/models/vinai/phobert-base-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-10-12 12:08:15 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/vinai/phobert-base-v2/resolve/main/vocab.txt "HTTP/1.1 307 Temporary Redirect"
+2026-10-12 12:08:15 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/vinai/phobert-base-v2/86cd7fd4c148980922ac11a2cf5e257f2ba639e1/vocab.txt "HTTP/1.1 200 OK"
+2026-10-12 12:08:15 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/vinai/phobert-base-v2/resolve/main/tokenizer.json "HTTP/1.1 307 Temporary Redirect"
+2026-10-12 12:08:15 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/vinai/phobert-base-v2/86cd7fd4c148980922ac11a2cf5e257f2ba639e1/tokenizer.json "HTTP/1.1 200 OK"
+2026-10-12 12:08:15 | INFO | __main__ | Tokenizer type: TokenizersBackend | Fast: True
+2026-10-12 12:08:15 | INFO | __main__ | Loading datasets...
+2026-10-12 12:08:15 | INFO | src.data | Loaded 5000 samples from data\train_data_processed.json
+2026-10-12 12:08:16 | INFO | src.data | Loaded 1000 samples from data\dev_data_processed.json
+2026-10-12 12:08:16 | INFO | src.data | Loaded 1000 samples from data\test_data_processed.json
+2026-10-12 12:08:16 | INFO | __main__ | Data loaded: Train=5000 | Dev=1000 | Test=1000
+2026-10-12 12:08:16 | INFO | __main__ | Loading model: vinai/phobert-base-v2 (CRF=True)
+2026-10-12 12:08:16 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/vinai/phobert-base-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-10-12 12:08:16 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/vinai/phobert-base-v2/86cd7fd4c148980922ac11a2cf5e257f2ba639e1/config.json "HTTP/1.1 200 OK"
+2026-10-12 12:08:17 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/vinai/phobert-base-v2/resolve/main/model.safetensors "HTTP/1.1 404 Not Found"
+2026-10-12 12:08:17 | INFO | src.model | CRF layer enabled
+2026-10-12 12:08:17 | INFO | src.model | Model: vinai/phobert-base-v2 | Labels: 31 | CRF: True | Hidden: 768
+2026-10-12 12:08:17 | INFO | httpx | HTTP Request: GET https://huggingface.co/api/models/vinai/phobert-base-v2 "HTTP/1.1 200 OK"
+2026-10-12 12:08:17 | INFO | httpx | HTTP Request: GET https://huggingface.co/api/models/vinai/phobert-base-v2/commits/main "HTTP/1.1 200 OK"
+2026-10-12 12:08:18 | INFO | httpx | HTTP Request: GET https://huggingface.co/api/models/vinai/phobert-base-v2/discussions?p=0 "HTTP/1.1 200 OK"
+2026-10-12 12:08:18 | INFO | httpx | HTTP Request: GET https://huggingface.co/api/models/vinai/phobert-base-v2/commits/refs%2Fpr%2F5 "HTTP/1.1 200 OK"
+2026-10-12 12:08:18 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/vinai/phobert-base-v2/resolve/refs%2Fpr%2F5/model.safetensors.index.json "HTTP/1.1 404 Not Found"
+2026-10-12 12:08:18 | INFO | __main__ | Parameters: 135,023,134 total | 135,023,134 trainable
+2026-10-12 12:08:18 | INFO | src.model | Parameter groups: Encoder (199 params, lr=2e-05) | Head (5 params, lr=0.0001)
+2026-10-12 12:08:18 | INFO | __main__ | Scheduler: cosine | Total steps: 4695 | Warmup: 469
+2026-10-12 12:08:18 | INFO | __main__ | ============================================================
+2026-10-12 12:08:18 | INFO | __main__ | BẮT ĐẦU HUẤN LUYỆN
+2026-10-12 12:08:18 | INFO | __main__ | ============================================================
+2026-10-12 12:08:19 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/vinai/phobert-base-v2/resolve/refs%2Fpr%2F5/model.safetensors "HTTP/1.1 302 Found"
+2026-10-12 14:02:42 | INFO | __main__ | GPU: NVIDIA GeForce RTX 4060 Laptop GPU (8.0 GB)
+2026-10-12 14:02:42 | INFO | __main__ | Device: cuda
+2026-10-12 14:02:42 | INFO | __main__ | Config: ABSAConfig(model_name='vinai/phobert-base-v2', use_crf=True, dropout=0.1, data_dir='data', train_file='train_data_processed.json', dev_file='dev_data_processed.json', test_file='test_data_processed.json', max_length=256, num_epochs=15, batch_size=16, eval_batch_size=32, learning_rate=3e-05, encoder_lr=2e-05, classifier_lr=0.0001, weight_decay=0.01, warmup_ratio=0.1, max_grad_norm=1.0, gradient_accumulation_steps=1, scheduler_type='cosine', output_dir='./output', logging_steps=50, save_best_only=True, seed=42, fp16=True, num_workers=0, aspects=['Material', 'General', 'Service', 'Design', 'Price'], sentiments=['positive', 'neutral', 'negative'])
+2026-10-12 14:02:42 | INFO | __main__ | Labels (31): ['O', 'B-Material#positive', 'I-Material#positive', 'B-Material#neutral', 'I-Material#neutral', 'B-Material#negative', 'I-Material#negative', 'B-General#positive', 'I-General#positive', 'B-General#neutral', 'I-General#neutral', 'B-General#negative', 'I-General#negative', 'B-Service#positive', 'I-Service#positive', 'B-Service#neutral', 'I-Service#neutral', 'B-Service#negative', 'I-Service#negative', 'B-Design#positive', 'I-Design#positive', 'B-Design#neutral', 'I-Design#neutral', 'B-Design#negative', 'I-Design#negative', 'B-Price#positive', 'I-Price#positive', 'B-Price#neutral', 'I-Price#neutral', 'B-Price#negative', 'I-Price#negative']
+2026-10-12 14:02:42 | INFO | __main__ | Loading tokenizer: vinai/phobert-base-v2
+2026-10-12 14:02:43 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/vinai/phobert-base-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-10-12 14:02:43 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/vinai/phobert-base-v2/86cd7fd4c148980922ac11a2cf5e257f2ba639e1/config.json "HTTP/1.1 200 OK"
+2026-10-12 14:02:43 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/vinai/phobert-base-v2/resolve/main/tokenizer_config.json "HTTP/1.1 404 Not Found"
+2026-10-12 14:02:43 | WARNING | huggingface_hub.utils._http | Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-10-12 14:02:44 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/vinai/phobert-base-v2/resolve/main/tokenizer_config.json "HTTP/1.1 404 Not Found"
+2026-10-12 14:02:44 | INFO | httpx | HTTP Request: GET https://huggingface.co/api/models/vinai/phobert-base-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-10-12 14:02:44 | INFO | httpx | HTTP Request: GET https://huggingface.co/api/models/vinai/phobert-base-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-10-12 14:02:45 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/vinai/phobert-base-v2/resolve/main/vocab.txt "HTTP/1.1 307 Temporary Redirect"
+2026-10-12 14:02:45 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/vinai/phobert-base-v2/86cd7fd4c148980922ac11a2cf5e257f2ba639e1/vocab.txt "HTTP/1.1 200 OK"
+2026-10-12 14:02:45 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/vinai/phobert-base-v2/resolve/main/tokenizer.json "HTTP/1.1 307 Temporary Redirect"
+2026-10-12 14:02:45 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/vinai/phobert-base-v2/86cd7fd4c148980922ac11a2cf5e257f2ba639e1/tokenizer.json "HTTP/1.1 200 OK"
+2026-10-12 14:02:45 | INFO | __main__ | Tokenizer type: TokenizersBackend | Fast: True
+2026-10-12 14:02:45 | INFO | __main__ | Loading datasets...
+2026-10-12 14:02:45 | INFO | src.data | Loaded 5000 samples from data\train_data_processed.json
+2026-10-12 14:02:45 | INFO | src.data | Loaded 1000 samples from data\dev_data_processed.json
+2026-10-12 14:02:45 | INFO | src.data | Loaded 1000 samples from data\test_data_processed.json
+2026-10-12 14:02:45 | INFO | __main__ | Data loaded: Train=5000 | Dev=1000 | Test=1000
+2026-10-12 14:02:45 | INFO | __main__ | Loading model: vinai/phobert-base-v2 (CRF=True)
+2026-10-12 14:02:46 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/vinai/phobert-base-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-10-12 14:02:46 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/vinai/phobert-base-v2/86cd7fd4c148980922ac11a2cf5e257f2ba639e1/config.json "HTTP/1.1 200 OK"
+2026-10-12 14:02:47 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/vinai/phobert-base-v2/resolve/main/model.safetensors "HTTP/1.1 404 Not Found"
+2026-10-12 14:02:47 | INFO | src.model | Resizing token embeddings: 64001 -> 66119
+2026-10-12 14:02:47 | INFO | httpx | HTTP Request: GET https://huggingface.co/api/models/vinai/phobert-base-v2 "HTTP/1.1 200 OK"
+2026-10-12 14:02:48 | INFO | httpx | HTTP Request: GET https://huggingface.co/api/models/vinai/phobert-base-v2/commits/main "HTTP/1.1 200 OK"
+2026-10-12 14:02:48 | INFO | httpx | HTTP Request: GET https://huggingface.co/api/models/vinai/phobert-base-v2/discussions?p=0 "HTTP/1.1 200 OK"
+2026-10-12 14:02:48 | INFO | src.model | CRF layer enabled
+2026-10-12 14:02:48 | INFO | src.model | Model: vinai/phobert-base-v2 | Vocab: 66119 | Labels: 31 | CRF: True | Hidden: 768
+2026-10-12 14:02:48 | INFO | httpx | HTTP Request: GET https://huggingface.co/api/models/vinai/phobert-base-v2/commits/refs%2Fpr%2F5 "HTTP/1.1 200 OK"
+2026-10-12 14:02:49 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/vinai/phobert-base-v2/resolve/refs%2Fpr%2F5/model.safetensors.index.json "HTTP/1.1 404 Not Found"
+2026-10-12 14:02:49 | INFO | __main__ | Parameters: 136,649,758 total | 136,649,758 trainable
+2026-10-12 14:02:49 | INFO | src.model | Parameter groups: Encoder (199 params, lr=2e-05) | Head (5 params, lr=0.0001)
+2026-10-12 14:02:49 | INFO | __main__ | Scheduler: cosine | Total steps: 4695 | Warmup: 469
+2026-10-12 14:02:49 | INFO | __main__ | ============================================================
+2026-10-12 14:02:49 | INFO | __main__ | BẮT ĐẦU HUẤN LUYỆN
+2026-10-12 14:02:49 | INFO | __main__ | ============================================================
+2026-10-12 14:02:49 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/vinai/phobert-base-v2/resolve/refs%2Fpr%2F5/model.safetensors "HTTP/1.1 302 Found"
+2026-10-12 14:03:28 | INFO | __main__ | Epoch 1 | Step 50/313 | Loss: 137.1009 | LR: 2.13e-06
+2026-10-12 14:04:09 | INFO | __main__ | Epoch 1 | Step 100/313 | Loss: 72.4460 | LR: 4.26e-06
+2026-10-12 14:04:49 | INFO | __main__ | Epoch 1 | Step 150/313 | Loss: 66.8213 | LR: 6.40e-06
+2026-10-12 14:05:29 | INFO | __main__ | Epoch 1 | Step 200/313 | Loss: 85.1559 | LR: 8.53e-06
+2026-10-12 14:06:09 | INFO | __main__ | Epoch 1 | Step 250/313 | Loss: 66.8295 | LR: 1.07e-05
+2026-10-12 14:06:49 | INFO | __main__ | Epoch 1 | Step 300/313 | Loss: 59.3134 | LR: 1.28e-05
+2026-10-12 14:07:26 | INFO | __main__ | 
+Epoch 1/15 (277s) | Train Loss: 81.8582 | Dev Loss: 53.3834 | Dev Exact-F1: 0.1658 | Dev Prop-F1: 0.4824
+2026-10-12 14:07:27 | INFO | __main__ | ✅ Best model saved! F1=0.1658 at epoch 1
+2026-10-12 14:08:08 | INFO | __main__ | Epoch 2 | Step 50/313 | Loss: 41.3121 | LR: 1.55e-05
+2026-10-12 14:08:50 | INFO | __main__ | Epoch 2 | Step 100/313 | Loss: 42.3261 | LR: 1.76e-05
+2026-10-12 14:09:30 | INFO | __main__ | Epoch 2 | Step 150/313 | Loss: 41.5306 | LR: 1.97e-05
+2026-10-12 14:10:10 | INFO | __main__ | Epoch 2 | Step 200/313 | Loss: 29.6236 | LR: 2.00e-05
+2026-10-12 14:10:51 | INFO | __main__ | Epoch 2 | Step 250/313 | Loss: 33.7427 | LR: 2.00e-05
+2026-10-12 14:11:31 | INFO | __main__ | Epoch 2 | Step 300/313 | Loss: 27.1718 | LR: 1.99e-05
+2026-10-12 14:12:09 | INFO | __main__ | 
+Epoch 2/15 (282s) | Train Loss: 43.3133 | Dev Loss: 32.8845 | Dev Exact-F1: 0.3974 | Dev Prop-F1: 0.6424
+2026-10-12 14:12:11 | INFO | __main__ | ✅ Best model saved! F1=0.3974 at epoch 2
+2026-10-12 14:12:52 | INFO | __main__ | Epoch 3 | Step 50/313 | Loss: 30.1801 | LR: 1.99e-05
+2026-10-12 14:13:32 | INFO | __main__ | Epoch 3 | Step 100/313 | Loss: 24.5022 | LR: 1.98e-05
+2026-10-12 14:14:13 | INFO | __main__ | Epoch 3 | Step 150/313 | Loss: 32.6741 | LR: 1.97e-05
+2026-10-12 14:14:53 | INFO | __main__ | Epoch 3 | Step 200/313 | Loss: 31.5015 | LR: 1.96e-05
+2026-10-12 14:15:34 | INFO | __main__ | Epoch 3 | Step 250/313 | Loss: 24.9494 | LR: 1.95e-05
+2026-10-12 14:16:15 | INFO | __main__ | Epoch 3 | Step 300/313 | Loss: 26.8183 | LR: 1.94e-05
+2026-10-12 14:16:53 | INFO | __main__ | 
+Epoch 3/15 (282s) | Train Loss: 28.7150 | Dev Loss: 28.0565 | Dev Exact-F1: 0.3971 | Dev Prop-F1: 0.6520
+2026-10-12 14:17:34 | INFO | __main__ | Epoch 4 | Step 50/313 | Loss: 32.1798 | LR: 1.93e-05
+2026-10-12 14:18:16 | INFO | __main__ | Epoch 4 | Step 100/313 | Loss: 16.9059 | LR: 1.91e-05
+2026-10-12 14:18:56 | INFO | __main__ | Epoch 4 | Step 150/313 | Loss: 23.8455 | LR: 1.90e-05
+2026-10-12 14:19:37 | INFO | __main__ | Epoch 4 | Step 200/313 | Loss: 28.6381 | LR: 1.88e-05
+2026-10-12 14:20:18 | INFO | __main__ | Epoch 4 | Step 250/313 | Loss: 22.8959 | LR: 1.86e-05
+2026-10-12 14:20:58 | INFO | __main__ | Epoch 4 | Step 300/313 | Loss: 12.4198 | LR: 1.84e-05
+2026-10-12 14:21:36 | INFO | __main__ | 
+Epoch 4/15 (283s) | Train Loss: 22.5283 | Dev Loss: 26.7063 | Dev Exact-F1: 0.4141 | Dev Prop-F1: 0.6831
+2026-10-12 14:21:37 | INFO | __main__ | ✅ Best model saved! F1=0.4141 at epoch 4
+2026-10-12 14:22:17 | INFO | __main__ | Epoch 5 | Step 50/313 | Loss: 15.4277 | LR: 1.81e-05
+2026-10-12 14:22:57 | INFO | __main__ | Epoch 5 | Step 100/313 | Loss: 12.5256 | LR: 1.79e-05
+2026-10-12 14:23:37 | INFO | __main__ | Epoch 5 | Step 150/313 | Loss: 14.4185 | LR: 1.77e-05
+2026-10-12 14:24:17 | INFO | __main__ | Epoch 5 | Step 200/313 | Loss: 16.4116 | LR: 1.74e-05
+2026-10-12 14:24:57 | INFO | __main__ | Epoch 5 | Step 250/313 | Loss: 19.9651 | LR: 1.72e-05
+2026-10-12 14:25:36 | INFO | __main__ | Epoch 5 | Step 300/313 | Loss: 17.1648 | LR: 1.69e-05
+2026-10-12 14:26:15 | INFO | __main__ | 
+Epoch 5/15 (277s) | Train Loss: 18.1733 | Dev Loss: 26.7695 | Dev Exact-F1: 0.4189 | Dev Prop-F1: 0.6755
+2026-10-12 14:26:16 | INFO | __main__ | ✅ Best model saved! F1=0.4189 at epoch 5
+2026-10-12 14:26:16 | INFO | __main__ | 
+===========================================================================
+EVALUATION RESULTS
+===========================================================================
+
+Metric                     Precision     Recall         F1
+-------------------------------------------------------
+Span-level (exact)            0.3684     0.4855     0.4189
+Span-level (IoU≥0.5)          0.5939     0.7829     0.6755
+
+TP: 1192 | FP: 2044 | FN: 1263
+
+Category                      Prec      Rec       F1  Support
+------------------------------------------------------------
+Design#negative             0.3000   0.4211   0.3504      114
+Design#neutral              0.0577   0.0600   0.0588       50
+Design#positive             0.3225   0.4308   0.3689      253
+General#negative            0.1124   0.2381   0.1527       42
+General#neutral             0.0000   0.0000   0.0000       34
+General#positive            0.3261   0.5142   0.3991      529
+Material#negative           0.3180   0.5036   0.3898      137
+Material#neutral            0.0000   0.0000   0.0000       65
+Material#positive           0.5233   0.6235   0.5690      486
+Price#negative              0.0000   0.0000   0.0000        6
+Price#neutral               0.1860   0.1818   0.1839       44
+Price#positive              0.4194   0.5652   0.4815      230
+Service#negative            0.2889   0.2766   0.2826       47
+Service#neutral             0.0000   0.0000   0.0000        6
+Service#positive            0.4690   0.5510   0.5067      412
+------------------------------------------------------------
+Macro F1                                      0.2496
+===========================================================================
+2026-10-12 14:26:56 | INFO | __main__ | Epoch 6 | Step 50/313 | Loss: 10.0122 | LR: 1.66e-05
+2026-10-12 14:27:36 | INFO | __main__ | Epoch 6 | Step 100/313 | Loss: 15.0401 | LR: 1.63e-05
+2026-10-12 14:28:17 | INFO | __main__ | Epoch 6 | Step 150/313 | Loss: 12.6411 | LR: 1.60e-05
+2026-10-12 14:28:57 | INFO | __main__ | Epoch 6 | Step 200/313 | Loss: 18.2945 | LR: 1.57e-05
+2026-10-12 14:29:38 | INFO | __main__ | Epoch 6 | Step 250/313 | Loss: 14.9182 | LR: 1.54e-05
+2026-10-12 14:30:19 | INFO | __main__ | Epoch 6 | Step 300/313 | Loss: 12.9959 | LR: 1.51e-05
+2026-10-12 14:30:57 | INFO | __main__ | 
+Epoch 6/15 (281s) | Train Loss: 15.1560 | Dev Loss: 27.3161 | Dev Exact-F1: 0.4377 | Dev Prop-F1: 0.6847
+2026-10-12 14:30:58 | INFO | __main__ | ✅ Best model saved! F1=0.4377 at epoch 6
+2026-10-12 14:31:39 | INFO | __main__ | Epoch 7 | Step 50/313 | Loss: 12.8658 | LR: 1.47e-05
+2026-10-12 14:32:19 | INFO | __main__ | Epoch 7 | Step 100/313 | Loss: 14.8425 | LR: 1.43e-05
+2026-10-12 14:33:00 | INFO | __main__ | Epoch 7 | Step 150/313 | Loss: 15.3266 | LR: 1.40e-05
+2026-10-12 14:33:41 | INFO | __main__ | Epoch 7 | Step 200/313 | Loss: 11.8736 | LR: 1.37e-05
+2026-10-12 14:34:20 | INFO | __main__ | Epoch 7 | Step 250/313 | Loss: 17.3956 | LR: 1.33e-05
+2026-10-12 14:35:00 | INFO | __main__ | Epoch 7 | Step 300/313 | Loss: 10.4413 | LR: 1.30e-05
+2026-10-12 14:35:38 | INFO | __main__ | 
+Epoch 7/15 (279s) | Train Loss: 13.3410 | Dev Loss: 29.6913 | Dev Exact-F1: 0.4549 | Dev Prop-F1: 0.6949
+2026-10-12 14:35:39 | INFO | __main__ | ✅ Best model saved! F1=0.4549 at epoch 7
+2026-10-12 14:36:20 | INFO | __main__ | Epoch 8 | Step 50/313 | Loss: 9.1727 | LR: 1.25e-05
+2026-10-12 14:37:01 | INFO | __main__ | Epoch 8 | Step 100/313 | Loss: 17.2115 | LR: 1.21e-05
+2026-10-12 14:37:41 | INFO | __main__ | Epoch 8 | Step 150/313 | Loss: 8.5047 | LR: 1.18e-05
+2026-10-12 14:38:21 | INFO | __main__ | Epoch 8 | Step 200/313 | Loss: 14.3271 | LR: 1.14e-05
+2026-10-12 14:39:02 | INFO | __main__ | Epoch 8 | Step 250/313 | Loss: 5.0124 | LR: 1.10e-05
+2026-10-12 14:39:42 | INFO | __main__ | Epoch 8 | Step 300/313 | Loss: 9.2175 | LR: 1.07e-05
+2026-10-12 14:40:21 | INFO | __main__ | 
+Epoch 8/15 (281s) | Train Loss: 11.0411 | Dev Loss: 29.4115 | Dev Exact-F1: 0.4641 | Dev Prop-F1: 0.6974
+2026-10-12 14:40:22 | INFO | __main__ | ✅ Best model saved! F1=0.4641 at epoch 8
+2026-10-12 14:41:03 | INFO | __main__ | Epoch 9 | Step 50/313 | Loss: 6.6479 | LR: 1.02e-05
+2026-10-12 14:41:44 | INFO | __main__ | Epoch 9 | Step 100/313 | Loss: 10.1277 | LR: 9.84e-06
+2026-10-12 14:42:26 | INFO | __main__ | Epoch 9 | Step 150/313 | Loss: 9.5518 | LR: 9.47e-06
+2026-10-12 14:43:06 | INFO | __main__ | Epoch 9 | Step 200/313 | Loss: 5.4688 | LR: 9.09e-06
+2026-10-12 14:43:48 | INFO | __main__ | Epoch 9 | Step 250/313 | Loss: 8.8161 | LR: 8.72e-06
+2026-10-12 14:44:28 | INFO | __main__ | Epoch 9 | Step 300/313 | Loss: 8.5170 | LR: 8.36e-06
+2026-10-12 14:45:07 | INFO | __main__ | 
+Epoch 9/15 (285s) | Train Loss: 9.5297 | Dev Loss: 30.4398 | Dev Exact-F1: 0.4591 | Dev Prop-F1: 0.7025
+2026-10-12 14:45:49 | INFO | __main__ | Epoch 10 | Step 50/313 | Loss: 12.8680 | LR: 7.90e-06
+2026-10-12 14:46:30 | INFO | __main__ | Epoch 10 | Step 100/313 | Loss: 12.8722 | LR: 7.54e-06
+2026-10-12 14:47:10 | INFO | __main__ | Epoch 10 | Step 150/313 | Loss: 11.3048 | LR: 7.18e-06
+2026-10-12 14:47:50 | INFO | __main__ | Epoch 10 | Step 200/313 | Loss: 13.5139 | LR: 6.82e-06
+2026-10-12 14:48:29 | INFO | __main__ | Epoch 10 | Step 250/313 | Loss: 8.5218 | LR: 6.47e-06
+2026-10-12 14:49:10 | INFO | __main__ | Epoch 10 | Step 300/313 | Loss: 7.2066 | LR: 6.13e-06
+2026-10-12 14:49:47 | INFO | __main__ | 
+Epoch 10/15 (280s) | Train Loss: 8.3323 | Dev Loss: 30.6413 | Dev Exact-F1: 0.4784 | Dev Prop-F1: 0.7145
+2026-10-12 14:49:49 | INFO | __main__ | ✅ Best model saved! F1=0.4784 at epoch 10
+2026-10-12 14:49:49 | INFO | __main__ | 
+===========================================================================
+EVALUATION RESULTS
+===========================================================================
+
+Metric                     Precision     Recall         F1
+-------------------------------------------------------
+Span-level (exact)            0.4371     0.5283     0.4784
+Span-level (IoU≥0.5)          0.6528     0.7890     0.7145
+
+TP: 1297 | FP: 1670 | FN: 1158
+
+Category                      Prec      Rec       F1  Support
+------------------------------------------------------------
+Design#negative             0.3353   0.4912   0.3986      114
+Design#neutral              0.0909   0.1400   0.1102       50
+Design#positive             0.3544   0.4664   0.4027      253
+General#negative            0.2063   0.3095   0.2476       42
+General#neutral             0.1818   0.1176   0.1429       34
+General#positive            0.4344   0.5198   0.4733      529
+Material#negative           0.4390   0.5255   0.4784      137
+Material#neutral            0.2955   0.4000   0.3399       65
+Material#positive           0.5587   0.6461   0.5992      486
+Price#negative              0.0000   0.0000   0.0000        6
+Price#neutral               0.3636   0.4545   0.4040       44
+Price#positive              0.4803   0.5826   0.5265      230
+Service#negative            0.4375   0.4468   0.4421       47
+Service#neutral             0.0000   0.0000   0.0000        6
+Service#positive            0.5141   0.5752   0.5430      412
+------------------------------------------------------------
+Macro F1                                      0.3406
+===========================================================================
+2026-10-12 14:50:29 | INFO | __main__ | Epoch 11 | Step 50/313 | Loss: 4.3042 | LR: 5.70e-06
+2026-10-12 14:51:09 | INFO | __main__ | Epoch 11 | Step 100/313 | Loss: 9.8206 | LR: 5.37e-06
+2026-10-12 14:51:49 | INFO | __main__ | Epoch 11 | Step 150/313 | Loss: 7.9102 | LR: 5.04e-06
+2026-10-12 14:52:29 | INFO | __main__ | Epoch 11 | Step 200/313 | Loss: 11.8757 | LR: 4.72e-06
+2026-10-12 14:53:09 | INFO | __main__ | Epoch 11 | Step 250/313 | Loss: 7.9815 | LR: 4.41e-06
+2026-10-12 14:53:49 | INFO | __main__ | Epoch 11 | Step 300/313 | Loss: 8.0630 | LR: 4.11e-06
+2026-10-12 14:54:28 | INFO | __main__ | 
+Epoch 11/15 (279s) | Train Loss: 7.3627 | Dev Loss: 31.3992 | Dev Exact-F1: 0.4798 | Dev Prop-F1: 0.7138
+2026-10-12 14:54:30 | INFO | __main__ | ✅ Best model saved! F1=0.4798 at epoch 11
+2026-10-12 14:55:10 | INFO | __main__ | Epoch 12 | Step 50/313 | Loss: 7.5057 | LR: 3.73e-06
+2026-10-12 14:55:51 | INFO | __main__ | Epoch 12 | Step 100/313 | Loss: 8.7783 | LR: 3.45e-06
+2026-10-12 14:56:31 | INFO | __main__ | Epoch 12 | Step 150/313 | Loss: 10.0808 | LR: 3.17e-06
+2026-10-12 14:57:12 | INFO | __main__ | Epoch 12 | Step 200/313 | Loss: 12.2205 | LR: 2.91e-06
+2026-10-12 14:57:52 | INFO | __main__ | Epoch 12 | Step 250/313 | Loss: 7.9799 | LR: 2.65e-06
+2026-10-12 14:58:33 | INFO | __main__ | Epoch 12 | Step 300/313 | Loss: 10.2015 | LR: 2.40e-06
+2026-10-12 14:59:12 | INFO | __main__ | 
+Epoch 12/15 (282s) | Train Loss: 6.6496 | Dev Loss: 31.1911 | Dev Exact-F1: 0.4823 | Dev Prop-F1: 0.7190
+2026-10-12 14:59:14 | INFO | __main__ | ✅ Best model saved! F1=0.4823 at epoch 12
+2026-10-12 14:59:54 | INFO | __main__ | Epoch 13 | Step 50/313 | Loss: 3.7489 | LR: 2.11e-06
+2026-10-12 15:00:35 | INFO | __main__ | Epoch 13 | Step 100/313 | Loss: 6.2285 | LR: 1.88e-06
+2026-10-12 15:01:16 | INFO | __main__ | Epoch 13 | Step 150/313 | Loss: 6.5168 | LR: 1.67e-06
+2026-10-12 15:01:56 | INFO | __main__ | Epoch 13 | Step 200/313 | Loss: 4.1438 | LR: 1.47e-06
+2026-10-12 15:02:37 | INFO | __main__ | Epoch 13 | Step 250/313 | Loss: 3.0585 | LR: 1.28e-06
+2026-10-12 15:03:17 | INFO | __main__ | Epoch 13 | Step 300/313 | Loss: 3.8106 | LR: 1.11e-06
+2026-10-12 15:03:56 | INFO | __main__ | 
+Epoch 13/15 (282s) | Train Loss: 6.3160 | Dev Loss: 32.1643 | Dev Exact-F1: 0.4791 | Dev Prop-F1: 0.7161
+2026-10-12 15:04:36 | INFO | __main__ | Epoch 14 | Step 50/313 | Loss: 6.6566 | LR: 9.03e-07
+2026-10-12 15:05:16 | INFO | __main__ | Epoch 14 | Step 100/313 | Loss: 5.5719 | LR: 7.55e-07
+2026-10-12 15:05:57 | INFO | __main__ | Epoch 14 | Step 150/313 | Loss: 7.6969 | LR: 6.20e-07
+2026-10-12 15:06:38 | INFO | __main__ | Epoch 14 | Step 200/313 | Loss: 2.1972 | LR: 4.97e-07
+2026-10-12 15:07:19 | INFO | __main__ | Epoch 14 | Step 250/313 | Loss: 6.1344 | LR: 3.88e-07
+2026-10-12 15:08:00 | INFO | __main__ | Epoch 14 | Step 300/313 | Loss: 4.8019 | LR: 2.92e-07
+2026-10-12 15:08:39 | INFO | __main__ | 
+Epoch 14/15 (284s) | Train Loss: 6.0203 | Dev Loss: 32.0387 | Dev Exact-F1: 0.4817 | Dev Prop-F1: 0.7195
+2026-10-12 15:09:21 | INFO | __main__ | Epoch 15 | Step 50/313 | Loss: 4.8572 | LR: 1.91e-07
+2026-10-12 15:10:01 | INFO | __main__ | Epoch 15 | Step 100/313 | Loss: 6.8681 | LR: 1.25e-07
+2026-10-12 15:10:42 | INFO | __main__ | Epoch 15 | Step 150/313 | Loss: 9.5599 | LR: 7.33e-08
+2026-10-12 15:11:24 | INFO | __main__ | Epoch 15 | Step 200/313 | Loss: 6.8652 | LR: 3.53e-08
+2026-10-12 15:12:05 | INFO | __main__ | Epoch 15 | Step 250/313 | Loss: 4.0241 | LR: 1.10e-08
+2026-10-12 15:12:46 | INFO | __main__ | Epoch 15 | Step 300/313 | Loss: 4.8731 | LR: 4.67e-10
+2026-10-12 15:13:26 | INFO | __main__ | 
+Epoch 15/15 (287s) | Train Loss: 5.8847 | Dev Loss: 32.1108 | Dev Exact-F1: 0.4811 | Dev Prop-F1: 0.7176
+2026-10-12 15:13:26 | INFO | __main__ | 
+===========================================================================
+EVALUATION RESULTS
+===========================================================================
+
+Metric                     Precision     Recall         F1
+-------------------------------------------------------
+Span-level (exact)            0.4396     0.5312     0.4811
+Span-level (IoU≥0.5)          0.6558     0.7923     0.7176
+
+TP: 1304 | FP: 1662 | FN: 1151
+
+Category                      Prec      Rec       F1  Support
+------------------------------------------------------------
+Design#negative             0.3562   0.4561   0.4000      114
+Design#neutral              0.1233   0.1800   0.1463       50
+Design#positive             0.3794   0.4664   0.4184      253
+General#negative            0.1868   0.4048   0.2556       42
+General#neutral             0.2000   0.1765   0.1875       34
+General#positive            0.4363   0.5369   0.4814      529
+Material#negative           0.4545   0.5474   0.4967      137
+Material#neutral            0.2973   0.3385   0.3165       65
+Material#positive           0.5683   0.6337   0.5992      486
+Price#negative              0.0000   0.0000   0.0000        6
+Price#neutral               0.3696   0.3864   0.3778       44
+Price#positive              0.4742   0.6000   0.5298      230
+Service#negative            0.3571   0.4255   0.3883       47
+Service#neutral             0.0000   0.0000   0.0000        6
+Service#positive            0.5152   0.5777   0.5446      412
+------------------------------------------------------------
+Macro F1                                      0.3428
+===========================================================================
+2026-10-12 15:13:26 | INFO | __main__ | 
+============================================================
+2026-10-12 15:13:26 | INFO | __main__ | HUẤN LUYỆN HOÀN TẤT
+2026-10-12 15:13:26 | INFO | __main__ | Tổng thời gian: 70.6 phút
+2026-10-12 15:13:26 | INFO | __main__ | Best Dev F1: 0.4823 tại epoch 12
+2026-10-12 15:13:26 | INFO | __main__ | ============================================================
+2026-10-12 15:13:26 | INFO | __main__ | 
+Đang đánh giá trên tập TEST (best model)...
+2026-10-12 15:13:27 | INFO | __main__ | Loaded best checkpoint from epoch 12
+2026-10-12 15:13:54 | INFO | __main__ | 
+📊 TEST SET RESULTS:
+===========================================================================
+EVALUATION RESULTS
+===========================================================================
+
+Metric                     Precision     Recall         F1
+-------------------------------------------------------
+Span-level (exact)            0.4438     0.5356     0.4854
+Span-level (IoU≥0.5)          0.6525     0.7874     0.7136
+
+TP: 1323 | FP: 1658 | FN: 1147
+
+Category                      Prec      Rec       F1  Support
+------------------------------------------------------------
+Design#negative             0.3699   0.5400   0.4390      150
+Design#neutral              0.0833   0.1111   0.0952       54
+Design#positive             0.4333   0.5019   0.4651      259
+General#negative            0.2800   0.4375   0.3415       64
+General#neutral             0.2424   0.2667   0.2540       30
+General#positive            0.4333   0.5520   0.4855      500
+Material#negative           0.4631   0.5663   0.5095      166
+Material#neutral            0.2985   0.2985   0.2985       67
+Material#positive           0.5996   0.6767   0.6358      467
+Price#negative              0.0000   0.0000   0.0000       11
+Price#neutral               0.3175   0.4348   0.3670       46
+Price#positive              0.4078   0.4952   0.4473      210
+Service#negative            0.2619   0.2683   0.2651       41
+Service#neutral             0.0000   0.0000   0.0000        9
+Service#positive            0.5146   0.5783   0.5446      396
+------------------------------------------------------------
+Macro F1                                      0.3432
+===========================================================================
+2026-10-12 15:13:54 | INFO | __main__ | 
+Kết quả đã lưu tại: ./output\results.json
+2026-10-12 15:13:54 | INFO | __main__ | Model đã lưu tại: ./output\best_model.pt
