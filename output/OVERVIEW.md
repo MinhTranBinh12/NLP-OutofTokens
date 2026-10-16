@@ -37,7 +37,7 @@ $$\text{Văn bản đầu vào} \xrightarrow{\text{PhoBERT}} \text{Contextual Em
   * `O`: Không thuộc khía cạnh nào.
   * 5 Khía cạnh ($\text{Aspects}$): **Material** (Chất liệu), **Design** (Thiết kế / Form dáng), **Price** (Giá cả), **Service** (Dịch vụ / Giao hàng / Tư vấn), **General** (Đánh giá chung).
   * 3 Cực tính cảm xúc ($\text{Sentiments}$): **positive**, **neutral**, **negative**.
-  * Cặp nhãn BIO: $B\text{-Aspect\#Sentiment}$ và $I\text{-Aspect\#Sentiment}$ ($2 \times 5 \times 3 = 30$ nhãn + 1 nhãn $O$).
+  * Cặp nhãn BIO: $B\text{-Aspect-Sentiment}$ và $I\text{-Aspect-Sentiment}$ ($2 \times 5 \times 3 = 30$ nhãn + 1 nhãn $O$).
 
 ---
 
