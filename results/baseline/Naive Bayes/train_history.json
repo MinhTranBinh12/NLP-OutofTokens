@@ -1,0 +1,52 @@
+[
+  {
+    "epoch": 1,
+    "solver_name": "Closed-Form Counting",
+    "all_converged": true,
+    "aspect_iterations": {
+      "Material": {
+        "n_iter": 1,
+        "max_iter": 1,
+        "tol": 0.0,
+        "converged": true
+      },
+      "General": {
+        "n_iter": 1,
+        "max_iter": 1,
+        "tol": 0.0,
+        "converged": true
+      },
+      "Service": {
+        "n_iter": 1,
+        "max_iter": 1,
+        "tol": 0.0,
+        "converged": true
+      },
+      "Design": {
+        "n_iter": 1,
+        "max_iter": 1,
+        "tol": 0.0,
+        "converged": true
+      },
+      "Price": {
+        "n_iter": 1,
+        "max_iter": 1,
+        "tol": 0.0,
+        "converged": true
+      }
+    },
+    "train_duration_seconds": 1.1664,
+    "dev_Material_macro_f1": 0.5542605973392861,
+    "dev_Material_acc": 0.704,
+    "dev_General_macro_f1": 0.4118796248772716,
+    "dev_General_acc": 0.682,
+    "dev_Service_macro_f1": 0.5713592571976929,
+    "dev_Service_acc": 0.872,
+    "dev_Design_macro_f1": 0.5244759348548353,
+    "dev_Design_acc": 0.756,
+    "dev_Price_macro_f1": 0.5684194011711412,
+    "dev_Price_acc": 0.878,
+    "dev_mean_aspect_macro_f1": 0.5260789630880455,
+    "dev_exact_match_ratio": 0.287
+  }
+]

@@ -1,0 +1,52 @@
+[
+  {
+    "epoch": 1,
+    "solver_name": "L-BFGS (Quasi-Newton)",
+    "all_converged": true,
+    "aspect_iterations": {
+      "Material": {
+        "n_iter": 68,
+        "max_iter": 1000,
+        "tol": 0.0001,
+        "converged": true
+      },
+      "General": {
+        "n_iter": 68,
+        "max_iter": 1000,
+        "tol": 0.0001,
+        "converged": true
+      },
+      "Service": {
+        "n_iter": 42,
+        "max_iter": 1000,
+        "tol": 0.0001,
+        "converged": true
+      },
+      "Design": {
+        "n_iter": 66,
+        "max_iter": 1000,
+        "tol": 0.0001,
+        "converged": true
+      },
+      "Price": {
+        "n_iter": 54,
+        "max_iter": 1000,
+        "tol": 0.0001,
+        "converged": true
+      }
+    },
+    "train_duration_seconds": 3.5584,
+    "dev_Material_macro_f1": 0.7458927989197492,
+    "dev_Material_acc": 0.827,
+    "dev_General_macro_f1": 0.6410597674151267,
+    "dev_General_acc": 0.746,
+    "dev_Service_macro_f1": 0.6278800836983558,
+    "dev_Service_acc": 0.919,
+    "dev_Design_macro_f1": 0.6814830795192343,
+    "dev_Design_acc": 0.795,
+    "dev_Price_macro_f1": 0.679384350879045,
+    "dev_Price_acc": 0.921,
+    "dev_mean_aspect_macro_f1": 0.6751400160863023,
+    "dev_exact_match_ratio": 0.439
+  }
+]

@@ -1,0 +1,15 @@
+{
+  "epoch": 1,
+  "Material_macro_f1": 0.5542605973392861,
+  "Material_acc": 0.704,
+  "General_macro_f1": 0.4118796248772716,
+  "General_acc": 0.682,
+  "Service_macro_f1": 0.5713592571976929,
+  "Service_acc": 0.872,
+  "Design_macro_f1": 0.5244759348548353,
+  "Design_acc": 0.756,
+  "Price_macro_f1": 0.5684194011711412,
+  "Price_acc": 0.878,
+  "mean_aspect_macro_f1": 0.5260789630880455,
+  "exact_match_ratio": 0.287
+}

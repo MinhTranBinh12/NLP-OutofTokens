@@ -11,6 +11,6 @@
   "Price_acc": 0.927,
   "mean_aspect_macro_f1": 0.6477856556050853,
   "exact_match_ratio": 0.432,
-  "inference_ms_per_sentence": 0.023722299996734364,
+  "inference_ms_per_sentence": 0.0241624000000229,
   "best_epoch": 1
 }

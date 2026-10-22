@@ -1,0 +1,16 @@
+{
+  "Material_macro_f1": 0.5310541379815465,
+  "Material_acc": 0.681,
+  "General_macro_f1": 0.4746666889497609,
+  "General_acc": 0.7,
+  "Service_macro_f1": 0.5246494399858894,
+  "Service_acc": 0.861,
+  "Design_macro_f1": 0.5198454005226552,
+  "Design_acc": 0.71,
+  "Price_macro_f1": 0.5430670306891806,
+  "Price_acc": 0.881,
+  "mean_aspect_macro_f1": 0.5186565396258065,
+  "exact_match_ratio": 0.267,
+  "inference_ms_per_sentence": 0.16378080000049522,
+  "best_epoch": 1
+}
