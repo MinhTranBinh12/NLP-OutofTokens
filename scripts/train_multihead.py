@@ -45,14 +45,17 @@ from src.models.phobert_multihead import MultiHeadWeightedLoss, PhoBERTMultiHead
 
 
 def parse_args():
-    p = argparse.ArgumentParser(description="Train PhoBERT Multi-Head (Sentence-level ABSA)")
+    p = argparse.ArgumentParser(description="Train Transformer Multi-Head (Sentence-level ABSA)")
+    # Thí nghiệm & Pipeline
+    p.add_argument("--exp_name", type=str, default=None, help="Tên thí nghiệm (vd: exp1_phobert_baseline, exp2_visobert, exp3_phobert_normalized)")
+    p.add_argument("--preprocess_mode", choices=["minimal", "normalized"], default="minimal", help="Chế độ tiền xử lý dữ liệu: 'minimal' (giữ nguyên) hoặc 'normalized' (chuẩn hóa teencode, emoji, bẫy giá tiền k)")
     # Dữ liệu & đường dẫn
     p.add_argument("--data_dir", default=os.path.join(ROOT, "data", "processed"))
-    p.add_argument("--output_dir", default=os.path.join(ROOT, "saved_models", "multihead"))
-    p.add_argument("--results_dir", default=os.path.join(ROOT, "results", "multihead"))
+    p.add_argument("--output_dir", default=None)
+    p.add_argument("--results_dir", default=None)
     p.add_argument("--max_samples", type=int, default=None, help="Giới hạn số mẫu (debug)")
     # Mô hình
-    p.add_argument("--model_name", default="vinai/phobert-base-v2")
+    p.add_argument("--model_name", default="vinai/phobert-base-v2", help="Tên mô hình pre-trained (vd: vinai/phobert-base-v2 hoặc uitnlp/visobert-base)")
     p.add_argument("--max_len", type=int, default=256)
     p.add_argument("--dropout", type=float, default=0.3)
     p.add_argument("--weight_smoothing", choices=["inverse", "sqrt", "none"], default="inverse")
@@ -71,7 +74,20 @@ def parse_args():
     # Chế độ
     p.add_argument("--do_test", action="store_true", help="Đánh giá Test 1 lần sau khi train xong")
     p.add_argument("--test_only", action="store_true", help="Bỏ qua train, chỉ chạy Test bằng best checkpoint")
-    return p.parse_args()
+    
+    args = p.parse_args()
+    # Tự động định tuyến thư mục theo namespace multihead để tránh xung đột Git với các bạn khác
+    if args.exp_name:
+        if args.output_dir is None:
+            args.output_dir = os.path.join(ROOT, "saved_models", "multihead", args.exp_name)
+        if args.results_dir is None:
+            args.results_dir = os.path.join(ROOT, "results", "multihead", args.exp_name)
+    else:
+        if args.output_dir is None:
+            args.output_dir = os.path.join(ROOT, "saved_models", "multihead")
+        if args.results_dir is None:
+            args.results_dir = os.path.join(ROOT, "results", "multihead")
+    return args
 
 
 def set_seed(seed: int):
@@ -88,7 +104,7 @@ def save_json(obj, path: str):
 
 
 def make_loader(path, tokenizer, args, shuffle):
-    records = load_processed_json(path, args.max_samples)
+    records = load_processed_json(path, args.max_samples, preprocess_mode=args.preprocess_mode)
     ds = MultiHeadDataset(records, tokenizer, args.max_len)
     loader = DataLoader(
         ds,
@@ -141,6 +157,9 @@ def train(args, tokenizer, device, use_amp):
         class_weights = compute_class_weights(train_records, args.weight_smoothing)
     save_json(
         {
+            "exp_name": args.exp_name or "multihead",
+            "model_name": args.model_name,
+            "preprocess_mode": args.preprocess_mode,
             "train_label_distribution": label_distribution(train_records),
             "class_weights": class_weights.tolist() if class_weights is not None else None,
         },
@@ -230,6 +249,9 @@ def test(args, tokenizer, device, use_amp, ckpt_path):
     metrics, y_true, y_pred, ms = evaluate(model, test_loader, device, use_amp)
     metrics["inference_ms_per_sentence"] = ms
     metrics["best_epoch"] = ckpt.get("epoch")
+    metrics["exp_name"] = args.exp_name or "multihead"
+    metrics["model_name"] = saved_args.get("model_name", args.model_name)
+    metrics["preprocess_mode"] = getattr(args, "preprocess_mode", "minimal")
 
     print("\n===== KẾT QUẢ TEST (CHÍNH THỨC) =====")
     print(format_metrics(metrics))

@@ -14,21 +14,33 @@ from typing import Any, Dict, List, Optional
 import torch
 from torch.utils.data import Dataset
 
+from src.preprocessing import preprocess_text
+
 ASPECTS: List[str] = ["Material", "General", "Service", "Design", "Price"]
 NUM_ASPECTS: int = 5
 NUM_CLASSES: int = 4  # 0: None, 1: positive, 2: neutral, 3: negative
 
 
-def load_processed_json(path: str, max_samples: Optional[int] = None) -> List[Dict[str, Any]]:
-    """Đọc file JSON đã xử lý, chỉ giữ lại các trường cần cho Multi-Head."""
+def load_processed_json(
+    path: str, max_samples: Optional[int] = None, preprocess_mode: str = "minimal"
+) -> List[Dict[str, Any]]:
+    """Đọc file JSON đã xử lý, hỗ trợ tiền xử lý on-the-fly theo chế độ (minimal / normalized)."""
     with open(path, "r", encoding="utf-8") as f:
         data = json.load(f)
     if max_samples is not None:
         data = data[:max_samples]
-    return [
-        {"id": item.get("id", i), "comment": item["comment"], "aspect_vector": item["aspect_vector"]}
-        for i, item in enumerate(data)
-    ]
+
+    records = []
+    for i, item in enumerate(data):
+        comment = item["comment"]
+        if preprocess_mode != "minimal":
+            comment = preprocess_text(comment, mode=preprocess_mode)
+        records.append({
+            "id": item.get("id", i),
+            "comment": comment,
+            "aspect_vector": item["aspect_vector"],
+        })
+    return records
 
 
 class MultiHeadDataset(Dataset):
