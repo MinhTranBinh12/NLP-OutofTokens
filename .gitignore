@@ -37,3 +37,9 @@ checkpoints/
 runs/
 logs/
 wandb/
+
+# Script chạy demo cá nhân (chỉ dùng cục bộ)
+scripts/demo_predict.py
+
+# Local binaries
+powershell.exe

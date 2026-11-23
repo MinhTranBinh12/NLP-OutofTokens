@@ -1,0 +1,19 @@
+{
+  "Material_macro_f1": 0.7778104986182699,
+  "Material_acc": 0.87,
+  "General_macro_f1": 0.6993798927074395,
+  "General_acc": 0.816,
+  "Service_macro_f1": 0.8245349127092294,
+  "Service_acc": 0.953,
+  "Design_macro_f1": 0.7290220212807004,
+  "Design_acc": 0.836,
+  "Price_macro_f1": 0.8366622908783086,
+  "Price_acc": 0.949,
+  "mean_aspect_macro_f1": 0.7734819232387895,
+  "exact_match_ratio": 0.578,
+  "inference_ms_per_sentence": 1.4120596709999518,
+  "best_epoch": 10,
+  "exp_name": "exp3_phobert_normalized",
+  "model_name": "vinai/phobert-base-v2",
+  "preprocess_mode": "normalized"
+}

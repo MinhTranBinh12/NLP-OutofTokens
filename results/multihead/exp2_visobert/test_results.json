@@ -1,0 +1,19 @@
+{
+  "Material_macro_f1": 0.7303709662390654,
+  "Material_acc": 0.843,
+  "General_macro_f1": 0.652310054276156,
+  "General_acc": 0.797,
+  "Service_macro_f1": 0.7797112000202182,
+  "Service_acc": 0.944,
+  "Design_macro_f1": 0.6912295590569824,
+  "Design_acc": 0.82,
+  "Price_macro_f1": 0.7780974574798283,
+  "Price_acc": 0.937,
+  "mean_aspect_macro_f1": 0.72634384741445,
+  "exact_match_ratio": 0.526,
+  "inference_ms_per_sentence": 1.6656747439999435,
+  "best_epoch": 10,
+  "exp_name": "exp2_visobert",
+  "model_name": "uitnlp/visobert",
+  "preprocess_mode": "minimal"
+}

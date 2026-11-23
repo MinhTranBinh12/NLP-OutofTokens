@@ -1,4 +1,7 @@
 {
+  "exp_name": "exp2_visobert",
+  "model_name": "uitnlp/visobert",
+  "preprocess_mode": "minimal",
   "train_label_distribution": {
     "Material": [
       1750,
